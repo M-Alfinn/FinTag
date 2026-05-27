@@ -483,18 +483,17 @@ export default function Shop() {
                       {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
                       <div 
                         className={cn(
-                          "absolute inset-0 z-20 flex flex-col justify-end overflow-hidden pointer-events-none",
-                          isSquare ? "rounded-[24px]" : isRectangle ? "rounded-[14px]" : "rounded-none"
+                          "absolute bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 z-20 flex flex-col justify-center overflow-hidden",
+                          isOctagonal
+                            ? "bottom-0 inset-x-0 rounded-none"
+                            : isSquare
+                              ? "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[23.5px]"
+                              : "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[13.5px]"
                         )}
-                        style={{
-                          clipPath: isOctagonal ? octagonalClip : 'none'
-                        }}
                       >
-                        <div className="bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 w-full flex flex-col justify-center pointer-events-auto">
-                          <p className="text-[9px] font-black text-white leading-tight truncate">
-                            {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
-                          </p>
-                        </div>
+                        <p className="text-[9px] font-black text-white leading-tight truncate">
+                          {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -583,7 +582,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                     PILIH KATALOG GANCI STANDAR
+                    🛍️ PILIH KATALOG GANCI STANDAR
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -644,7 +643,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                       PILIH MODEL KUSTOMISASI
+                      ⚙️ PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
