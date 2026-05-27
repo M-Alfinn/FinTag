@@ -405,7 +405,7 @@ export default function Shop() {
         {/* LEFT COLUMN: Compact Mockup & Pricing */}
         <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
           {/* Keychain Mockup Body Wrapper */}
-          <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-b from-slate-50 to-slate-100/30 dark:from-slate-950/15 dark:to-slate-900/10 rounded-3xl border border-slate-150 dark:border-white/5 relative shadow-inner overflow-hidden min-h-[290px]">
+          <div className="flex flex-col items-center justify-center pt-8 pb-5 px-4 bg-gradient-to-b from-slate-50 to-slate-100/30 dark:from-slate-950/15 dark:to-slate-900/10 rounded-3xl border border-slate-150 dark:border-white/5 relative shadow-inner overflow-visible min-h-[290px]">
             {/* Top key ring metal hanger */}
             <div className="w-5 h-5 border-[4px] border-slate-300 dark:border-slate-700 rounded-full shadow-md z-10 bg-slate-50 dark:bg-slate-900 -mt-2 animate-bounce duration-1000" />
             <div className="w-1.5 h-4 bg-gradient-to-b from-slate-300 to-slate-400 dark:from-slate-700 dark:to-slate-800 rounded z-10 -mt-1 mb-1 shadow-sm" />
@@ -424,17 +424,17 @@ export default function Shop() {
                   animate={{ scale: 1, rotate: 1, y: 0 }}
                   transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                   className={cn(
-                    "inline-block relative select-none transition-all duration-300 overflow-hidden",
+                    "inline-block relative select-none transition-all duration-300",
                     isOctagonal 
-                      ? "bg-white/60 dark:bg-slate-900/85 border border-slate-300/40 dark:border-white/10" 
+                      ? "p-[7px] bg-gradient-to-b from-slate-200 to-slate-350 dark:from-slate-700/90 dark:to-slate-800/90" 
                       : "bg-white/10 dark:bg-slate-900/10 p-2 border-2 border-slate-300/80 dark:border-white/15",
                     isSquare ? "rounded-[32px]" : isRectangle ? "rounded-[20px]" : "rounded-none"
                   )}
                   style={{
                     ...getMockupDimensions(imgAspect),
-                    boxShadow: isOctagonal ? '0 12px 30px -8px rgba(0,0,0,0.2), inset 0 0 8px rgba(255,255,255,0.4)' : '0 15px 35px -10px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.3)',
+                    boxShadow: isOctagonal ? 'none' : '0 15px 35px -10px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.3)',
                     clipPath: isOctagonal ? octagonalClip : 'none',
-                    filter: isOctagonal ? 'drop-shadow(0 15px 25px rgba(0,0,0,0.15))' : 'none'
+                    filter: isOctagonal ? 'drop-shadow(0 12px 24px rgba(0,0,0,0.22)) drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none'
                   }}
                 >
                   {/* Top tiny punch hole inner hole */}
@@ -443,91 +443,52 @@ export default function Shop() {
                   {/* Bevel/Print Wrapper */}
                   <div
                     className={cn(
-                      "relative transition-all duration-300",
+                      "w-full h-full relative transition-all duration-300 overflow-hidden bg-white dark:bg-slate-950 flex flex-col justify-center items-center transform-gpu isolate",
                       isOctagonal 
-                        ? "absolute inset-[8px] bg-white dark:bg-slate-950 overflow-hidden" 
-                        : "w-full h-full overflow-hidden bg-white dark:bg-slate-950 border border-slate-100 dark:border-white/5 flex flex-col justify-center items-center relative transform-gpu isolate",
+                        ? "" 
+                        : "border border-slate-100 dark:border-white/5",
                       isSquare ? "rounded-[24px]" : isRectangle ? "rounded-[14px]" : "rounded-none"
                     )}
+                    style={{
+                      clipPath: isOctagonal ? octagonalClip : 'none'
+                    }}
                   >
-                    {isOctagonal ? (
-                      // Octagonal Content Area - perfectly centered inside the inset-[8px] body
-                      <div className="w-full h-full relative flex flex-col justify-center items-center">
-                        {/* 3D Glass shine reflections */}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-20" />
+                    {/* 3D Glass shine reflections */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-20" />
 
-                        {/* Backup scaled image to fill nicely */}
-                        <img 
-                          src={displayImage} 
-                          className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none transition-all duration-300" 
-                          alt=""
-                          referrerPolicy="no-referrer"
-                        />
+                    {/* Backup scaled image to fill nicely */}
+                    <img 
+                      src={displayImage} 
+                      className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none transition-all duration-300" 
+                      alt=""
+                      referrerPolicy="no-referrer"
+                    />
 
-                        {/* Precise crisp unblurred master image */}
-                        <img 
-                          src={displayImage} 
-                          className="relative z-10 max-w-full max-h-full object-contain transition-all duration-300 pointer-events-none select-none" 
-                          style={{ imageRendering: 'high-quality' }}
-                          alt="Acrylic Ganci Mockup"
-                          referrerPolicy="no-referrer"
-                        />
+                    {/* Precise crisp unblurred master image */}
+                    <img 
+                      src={displayImage} 
+                      className="relative z-10 max-w-full max-h-full object-contain transition-all duration-300 pointer-events-none select-none" 
+                      style={{ imageRendering: 'high-quality' }}
+                      alt="Acrylic Ganci Mockup"
+                      referrerPolicy="no-referrer"
+                    />
 
-                        {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
-                        <div className="absolute bottom-0 inset-x-0 z-20 pointer-events-auto">
-                          <div 
-                            className="bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 flex flex-col justify-center overflow-hidden shadow-[0_-2px_10px_rgba(0,0,0,0.05)]"
-                            style={{ height: '32px' }}
-                          >
-                            <p className="text-[9px] font-black text-white leading-tight truncate">
-                              {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
-                            </p>
-                          </div>
-                        </div>
+                    {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
+                    <div className="absolute bottom-[-0.5px] -inset-x-[0.5px] z-20 pointer-events-auto">
+                      <div 
+                        className={cn(
+                          "bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 flex flex-col justify-center overflow-hidden shadow-[0_-2px_10px_rgba(0,0,0,0.05)]",
+                          isSquare ? "rounded-b-[23.5px]" : isRectangle ? "rounded-b-[13.5px]" : "rounded-none"
+                        )}
+                        style={{
+                          height: '32px'
+                        }}
+                      >
+                        <p className="text-[9px] font-black text-white leading-tight truncate">
+                          {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
+                        </p>
                       </div>
-                    ) : (
-                      // Square/Rectangle Content Area
-                      <>
-                        {/* 3D Glass shine reflections */}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-20" />
-
-                        {/* Backup scaled image to fill nicely */}
-                        <img 
-                          src={displayImage} 
-                          className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none transition-all duration-300" 
-                          alt=""
-                          referrerPolicy="no-referrer"
-                        />
-
-                        {/* Precise crisp unblurred master image */}
-                        <img 
-                          src={displayImage} 
-                          className="relative z-10 max-w-full max-h-full object-contain transition-all duration-300 pointer-events-none select-none" 
-                          style={{ imageRendering: 'high-quality' }}
-                          alt="Acrylic Ganci Mockup"
-                          referrerPolicy="no-referrer"
-                        />
-
-                        {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
-                        <div className="absolute inset-0 z-20 pointer-events-none">
-                          <div 
-                            className={cn(
-                              "absolute bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 pointer-events-auto flex flex-col justify-center overflow-hidden",
-                              isSquare
-                                ? "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[23.5px]"
-                                : "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[13.5px]"
-                            )}
-                            style={{
-                              height: '32px'
-                            }}
-                          >
-                            <p className="text-[9px] font-black text-white leading-tight truncate">
-                              {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
-                            </p>
-                          </div>
-                        </div>
-                      </>
-                    )}
+                    </div>
                   </div>
                 </motion.div>
               );
