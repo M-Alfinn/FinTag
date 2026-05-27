@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { db } from './firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { triggerQuotaExceeded } from './auth';
 
 export interface Song {
   id: string;
@@ -26,6 +27,33 @@ interface MusicContextType {
   seek: (seconds: number) => void;
 }
 
+const FALLBACK_SONGS: Song[] = [
+  {
+    id: 'fallback-1',
+    title: 'Warm Afternoon',
+    artist: 'Lofi Ambient',
+    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=400',
+    isCustom: false
+  },
+  {
+    id: 'fallback-2',
+    title: 'Midnight Cozy Coding',
+    artist: 'Study Beats',
+    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+    cover: 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&q=80&w=400',
+    isCustom: false
+  },
+  {
+    id: 'fallback-3',
+    title: 'Rainy Cafe Walk',
+    artist: 'Coffee Chill',
+    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    cover: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&q=80&w=400',
+    isCustom: false
+  }
+];
+
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
 
 export function MusicProvider({ children }: { children: React.ReactNode }) {
@@ -37,8 +65,22 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Synchronize songs with Firebase Firestore (ONLY Firestore songs, no hardcoded local songs)
+  // Synchronize songs with Firebase Firestore (with fallback hardcoded and local cache)
   useEffect(() => {
+    const cachedSongsKey = 'ganci_cached_songs';
+    
+    // Instantly preload cache or fallback tracks!
+    const cachedData = localStorage.getItem(cachedSongsKey);
+    if (cachedData) {
+      try {
+        setSongs(JSON.parse(cachedData));
+      } catch (e) {
+        setSongs(FALLBACK_SONGS);
+      }
+    } else {
+      setSongs(FALLBACK_SONGS);
+    }
+
     const q = query(collection(db, 'songs'), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const dbSongs = snapshot.docs.map(doc => ({
@@ -49,9 +91,30 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
         cover: doc.data().cover || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=400",
         isCustom: true
       }));
-      setSongs(dbSongs);
+      // If db returned no songs, serve fallbacks
+      const activeSongs = dbSongs.length > 0 ? dbSongs : FALLBACK_SONGS;
+      setSongs(activeSongs);
+      try {
+        localStorage.setItem(cachedSongsKey, JSON.stringify(activeSongs));
+      } catch (e) {}
     }, (error) => {
       console.error("Error loading songs from Firestore in MusicProvider:", error);
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+        
+        const localSongs = localStorage.getItem(cachedSongsKey);
+        if (localSongs) {
+          try {
+            setSongs(JSON.parse(localSongs));
+          } catch (e) {
+            setSongs(FALLBACK_SONGS);
+          }
+        } else {
+          setSongs(FALLBACK_SONGS);
+        }
+      }
     });
 
     return () => unsubscribe();

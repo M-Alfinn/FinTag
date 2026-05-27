@@ -21,7 +21,7 @@ import {
   Music,
 } from "lucide-react";
 import { formatRupiah, cn } from "../lib/utils";
-import { useAuth, handleFirestoreError, OperationType } from "../lib/auth";
+import { useAuth, handleFirestoreError, OperationType, triggerQuotaExceeded } from "../lib/auth";
 import { db, auth, storage } from "../lib/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {
@@ -435,7 +435,13 @@ export default function AdminDashboard() {
         setOrders(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
       },
       (error) => {
-        handleFirestoreError(error, OperationType.LIST, "orders");
+        const errMessage = error instanceof Error ? error.message : String(error);
+        const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+        if (isQuotaError) {
+          triggerQuotaExceeded();
+        } else {
+          handleFirestoreError(error, OperationType.LIST, "orders");
+        }
       },
     );
 
@@ -497,7 +503,13 @@ export default function AdminDashboard() {
         }
       },
       (error) => {
-        handleFirestoreError(error, OperationType.LIST, "products");
+        const errMessage = error instanceof Error ? error.message : String(error);
+        const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+        if (isQuotaError) {
+          triggerQuotaExceeded();
+        } else {
+          handleFirestoreError(error, OperationType.LIST, "products");
+        }
         setLoading(false);
       },
     );
@@ -510,7 +522,13 @@ export default function AdminDashboard() {
         setSongs(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
       },
       (error) => {
-        handleFirestoreError(error, OperationType.LIST, "songs");
+        const errMessage = error instanceof Error ? error.message : String(error);
+        const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+        if (isQuotaError) {
+          triggerQuotaExceeded();
+        } else {
+          handleFirestoreError(error, OperationType.LIST, "songs");
+        }
       },
     );
 

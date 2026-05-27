@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatRupiah, cn } from '../lib/utils';
-import { useAuth, handleFirestoreError, OperationType } from '../lib/auth';
+import { useAuth, handleFirestoreError, OperationType, triggerQuotaExceeded } from '../lib/auth';
 import { db } from '../lib/firebase';
 import { 
   collection, query, onSnapshot, addDoc, 
@@ -150,6 +150,11 @@ export default function Shop() {
       setLoading(false);
     }, (error) => {
       console.warn("Firestore error, loading default catalog:", error);
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+      }
       setLoading(false);
     });
 
@@ -280,14 +285,14 @@ export default function Shop() {
         bentukGanciText = 'Persegi Delapan Panjang (Oktagonal)';
       }
 
-      await addDoc(collection(db, 'orders'), {
+      const orderPayload = {
         productId: selectedMode === 'standard' ? (activeProduct.id || 'fintag-standard') : 'fintag-custom',
         productName: selectedMode === 'standard' ? activeProduct.name : 'Ganci Custom',
         totalPrice: totalPrice,
         userId: user?.uid || 'guest-session',
         status: 'pending',
         date: new Date().toISOString(),
-        createdAt: serverTimestamp(),
+        createdAt: new Date().toISOString(),
         name: form.name || 'Pelanggan Anonim',
         whatsapp: form.whatsapp || 'Tidak Diisi',
         notes: `Rincian Desain -> ${customNotesDescription}. Bentuk Akrilik: ${bentukGanciText}. ${productPriceInfo}. Catatan Pemesan: ${form.notes || 'Tidak ada catatan tambahan'}`,
@@ -299,7 +304,38 @@ export default function Shop() {
         customType: selectedMode === 'standard' ? '-' : (customType === 'formal' ? `Pas Foto Formal (Contoh ${selectedFormalIdx + 1})` : `Template (Template ${selectedTemplateIdx + 1})`),
         designDetails: customNotesDescription,
         userNotes: form.notes || 'Tidak ada catatan tambahan'
-      });
+      };
+
+      // Save order to local storage history as well for instant access/fallback
+      try {
+        const localOrdersKey = `ganci_orders_${user?.uid || 'guest'}`;
+        const localOrders = localStorage.getItem(localOrdersKey);
+        let orderList = [];
+        if (localOrders) {
+          orderList = JSON.parse(localOrders);
+        }
+        orderList.unshift({ id: 'local_' + Date.now(), ...orderPayload });
+        localStorage.setItem(localOrdersKey, JSON.stringify(orderList));
+      } catch (e) {
+        console.warn("Could not save order history locally:", e);
+      }
+
+      if (!window.__firestoreQuotaExceeded) {
+        try {
+          await addDoc(collection(db, 'orders'), {
+            ...orderPayload,
+            createdAt: serverTimestamp() // Use Firestore serverTimestamp
+          });
+        } catch (dbErr) {
+          const errMessage = dbErr instanceof Error ? dbErr.message : String(dbErr);
+          const isQuota = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+          if (isQuota) {
+            triggerQuotaExceeded();
+          } else {
+            console.error("Non-quota DB order insert failed:", dbErr);
+          }
+        }
+      }
 
       const helpClean = (str: string) => {
         return str
@@ -347,7 +383,20 @@ export default function Shop() {
       window.open(waLink, '_blank');
     } catch (error) {
       console.error(error);
-      handleFirestoreError(error, OperationType.CREATE, 'orders');
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+        // Since it's quota, still give the customer their WaLink!
+        const targetAdminNumber = "6289693727197";
+        // Re-construct basic message if failed early
+        const waLink = `https://wa.me/${targetAdminNumber}?text=${encodeURIComponent(`Halo Admin! Saya ingin memesan gantungan kunci custom/standar dari website FinTag.`)}`;
+        setIsConfirming(false);
+        confetti();
+        window.open(waLink, '_blank');
+      } else {
+        handleFirestoreError(error, OperationType.CREATE, 'orders');
+      }
     }
   };
 
@@ -425,7 +474,9 @@ export default function Shop() {
                   transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                   className={cn(
                     "inline-block relative select-none transition-all duration-300",
-                    "bg-white/10 dark:bg-slate-900/10 p-2 border-2 border-slate-300/80 dark:border-white/15",
+                    isOctagonal 
+                      ? "bg-white/90 dark:bg-slate-900/95 p-2" 
+                      : "bg-white/90 dark:bg-slate-900/95 p-2 border-2 border-slate-300/80 dark:border-white/15",
                     isSquare ? "rounded-[32px]" : isRectangle ? "rounded-[20px]" : "rounded-none"
                   )}
                   style={{
@@ -437,6 +488,23 @@ export default function Shop() {
                 >
                   {/* Top tiny punch hole inner hole */}
                   <div className="absolute top-1.5 right-1/2 translate-x-1/2 w-3 h-3 rounded-full border border-black/15 dark:border-white/10 bg-slate-50 dark:bg-slate-950 z-30 shadow-inner" />
+                  
+                  {isOctagonal && (
+                    <svg 
+                      className="absolute inset-[0.5px] w-[calc(100%-1px)] h-[calc(100%-1px)] pointer-events-none z-30 text-slate-300/80 dark:text-white/15 transition-colors duration-300" 
+                      viewBox="0 0 1000 1000" 
+                      preserveAspectRatio="none"
+                    >
+                      <polygon 
+                        points="153,8 847,8 992,125 992,875 847,992 153,992 8,875 8,125" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2"
+                        vectorEffect="non-scaling-stroke"
+                        className="transition-colors duration-300"
+                      />
+                    </svg>
+                  )}
                   
                   {/* Bevel/Print Wrapper */}
                   <div
@@ -554,7 +622,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                     PILIH KATALOG GANCI STANDAR
+                    🛍️ PILIH KATALOG GANCI STANDAR
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -615,7 +683,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                       PILIH MODEL KUSTOMISASI
+                      ⚙️ PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">

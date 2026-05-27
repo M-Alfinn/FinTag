@@ -11,7 +11,7 @@ import {
   PieChart as RePieChart, Pie, Cell, Legend
 } from 'recharts';
 import { formatRupiah, cn } from '../lib/utils';
-import { useAuth, handleFirestoreError, OperationType } from '../lib/auth';
+import { useAuth, handleFirestoreError, OperationType, triggerQuotaExceeded } from '../lib/auth';
 import { db } from '../lib/firebase';
 import { 
   collection, query, where, onSnapshot, addDoc, 
@@ -62,6 +62,29 @@ export default function FinancialTracker() {
   useEffect(() => {
     if (!user) return;
 
+    // Local Storage keys
+    const localTxKey = `ganci_txs_${user.uid}`;
+    const localBudgetKey = `ganci_budget_${user.uid}`;
+
+    // Pre-load from Local Storage for instant render and offline capability
+    const initialLocalTxs = localStorage.getItem(localTxKey);
+    if (initialLocalTxs) {
+      try {
+        setRecords(JSON.parse(initialLocalTxs));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    const initialLocalBudget = localStorage.getItem(localBudgetKey);
+    if (initialLocalBudget) {
+      try {
+        setBudget(Number(initialLocalBudget));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
     // Fetch Records
     const q = query(
       collection(db, 'transactions'), 
@@ -72,17 +95,37 @@ export default function FinancialTracker() {
     const unsubscribeRecords = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setRecords(data);
+      try {
+        localStorage.setItem(localTxKey, JSON.stringify(data));
+      } catch (e) {}
     }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, 'transactions');
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+        // Since we already pre-loaded from local storage, we just keep using it.
+      } else {
+        handleFirestoreError(error, OperationType.LIST, 'transactions');
+      }
     });
 
     // Fetch Budget
     const unsubscribeBudget = onSnapshot(doc(db, 'userConfigs', user.uid), (doc) => {
       if (doc.exists()) {
-        setBudget(doc.data().budget);
+        const amt = doc.data().budget;
+        setBudget(amt);
+        try {
+          localStorage.setItem(localBudgetKey, String(amt));
+        } catch (e) {}
       }
     }, (error) => {
-      handleFirestoreError(error, OperationType.GET, `userConfigs/${user.uid}`);
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+      } else {
+        handleFirestoreError(error, OperationType.GET, `userConfigs/${user.uid}`);
+      }
     });
 
     return () => {
@@ -110,6 +153,42 @@ export default function FinancialTracker() {
     const data = confirmAction?.data;
     if (!data || !user) return;
 
+    const localTxKey = `ganci_txs_${user.uid}`;
+    
+    const saveLocally = () => {
+      const localData = localStorage.getItem(localTxKey);
+      let list = [];
+      if (localData) {
+        try { list = JSON.parse(localData); } catch (e) {}
+      }
+      const newRecord = {
+        id: 'local_tx_' + Date.now(),
+        amount: Number(data.amount),
+        category: data.category,
+        description: data.description,
+        date: new Date(data.date).toISOString(),
+        userId: user.uid,
+        createdAt: new Date().toISOString(),
+        isLocal: true
+      };
+      const updated = [newRecord, ...list];
+      localStorage.setItem(localTxKey, JSON.stringify(updated));
+      setRecords(updated);
+    };
+
+    if (window.__firestoreQuotaExceeded) {
+      saveLocally();
+      setFormData({ 
+        amount: '', 
+        category: 'Makan', 
+        description: '',
+        date: new Date().toISOString().split('T')[0]
+      });
+      setIsAdding(false);
+      setConfirmAction(null);
+      return;
+    }
+
     try {
       await addDoc(collection(db, 'transactions'), {
         amount: Number(data.amount),
@@ -129,7 +208,22 @@ export default function FinancialTracker() {
       setIsAdding(false);
       setConfirmAction(null);
     } catch (error) {
-      handleFirestoreError(error, OperationType.CREATE, 'transactions');
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+        saveLocally();
+        setFormData({ 
+          amount: '', 
+          category: 'Makan', 
+          description: '',
+          date: new Date().toISOString().split('T')[0]
+        });
+        setIsAdding(false);
+        setConfirmAction(null);
+      } else {
+        handleFirestoreError(error, OperationType.CREATE, 'transactions');
+      }
     }
   };
 
@@ -149,15 +243,38 @@ export default function FinancialTracker() {
     const newAmount = confirmAction?.data;
     if (newAmount === undefined || !user) return;
 
+    const localBudgetKey = `ganci_budget_${user.uid}`;
+    const saveLocally = () => {
+      localStorage.setItem(localBudgetKey, String(newAmount));
+      setBudget(newAmount);
+    };
+
+    if (window.__firestoreQuotaExceeded) {
+      saveLocally();
+      setConfirmAction(null);
+      setIsSettingBudget(false);
+      return;
+    }
+
     try {
       await setDoc(doc(db, 'userConfigs', user.uid), {
         budget: newAmount,
         userId: user.uid
       });
+      try { localStorage.setItem(localBudgetKey, String(newAmount)); } catch (e) {}
       setConfirmAction(null);
       setIsSettingBudget(false);
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, `userConfigs/${user.uid}`);
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+        saveLocally();
+        setConfirmAction(null);
+        setIsSettingBudget(false);
+      } else {
+        handleFirestoreError(error, OperationType.WRITE, `userConfigs/${user.uid}`);
+      }
     }
   };
 
@@ -209,6 +326,36 @@ export default function FinancialTracker() {
     const data = confirmAction?.data;
     if (!data || !editingRecord || !user) return;
 
+    const localTxKey = `ganci_txs_${user.uid}`;
+    const saveLocally = () => {
+      const localData = localStorage.getItem(localTxKey);
+      let list = [];
+      if (localData) {
+        try { list = JSON.parse(localData); } catch (e) {}
+      }
+      const updated = list.map((r: any) => {
+        if (r.id === editingRecord.id) {
+          return {
+            ...r,
+            amount: Number(data.amount),
+            category: data.category,
+            description: data.description,
+            date: new Date(data.date).toISOString()
+          };
+        }
+        return r;
+      });
+      localStorage.setItem(localTxKey, JSON.stringify(updated));
+      setRecords(updated);
+    };
+
+    if (window.__firestoreQuotaExceeded) {
+      saveLocally();
+      setEditingRecord(null);
+      setConfirmAction(null);
+      return;
+    }
+
     try {
       await updateDoc(doc(db, 'transactions', editingRecord.id), {
         amount: Number(data.amount),
@@ -220,17 +367,53 @@ export default function FinancialTracker() {
       setEditingRecord(null);
       setConfirmAction(null);
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, `transactions/${editingRecord.id}`);
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+        saveLocally();
+        setEditingRecord(null);
+        setConfirmAction(null);
+      } else {
+        handleFirestoreError(error, OperationType.WRITE, `transactions/${editingRecord.id}`);
+      }
     }
   };
 
   const executeDelete = async () => {
-    if (!confirmAction?.id) return;
+    if (!confirmAction?.id || !user) return;
+
+    const localTxKey = `ganci_txs_${user.uid}`;
+    const saveLocally = () => {
+      const localData = localStorage.getItem(localTxKey);
+      let list = [];
+      if (localData) {
+        try { list = JSON.parse(localData); } catch (e) {}
+      }
+      const updated = list.filter((r: any) => r.id !== confirmAction.id);
+      localStorage.setItem(localTxKey, JSON.stringify(updated));
+      setRecords(updated);
+    };
+
+    if (window.__firestoreQuotaExceeded) {
+      saveLocally();
+      setConfirmAction(null);
+      return;
+    }
+
     try {
       await deleteDoc(doc(db, 'transactions', confirmAction.id));
       setConfirmAction(null);
     } catch (error) {
-      handleFirestoreError(error, OperationType.DELETE, `transactions/${confirmAction.id}`);
+      const errMessage = error instanceof Error ? error.message : String(error);
+      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+      if (isQuotaError) {
+        triggerQuotaExceeded();
+        saveLocally();
+        setConfirmAction(null);
+      } else {
+        handleFirestoreError(error, OperationType.DELETE, `transactions/${confirmAction.id}`);
+      }
     }
   };
 

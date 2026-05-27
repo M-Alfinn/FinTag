@@ -105,6 +105,13 @@ export interface FirestoreErrorInfo {
   }
 }
 
+export function triggerQuotaExceeded() {
+  if (typeof window !== 'undefined') {
+    (window as any).__firestoreQuotaExceeded = true;
+    window.dispatchEvent(new CustomEvent('firestore-quota-exceeded'));
+  }
+}
+
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
@@ -122,6 +129,18 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
     operationType,
     path
   }
+
+  const errMessage = errInfo.error;
+  const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
+
+  if (isQuotaError) {
+    console.error('Firestore Quota Exceeded. Logging error context for diagnostic:', JSON.stringify(errInfo));
+    triggerQuotaExceeded();
+    // Since this is a quota limit error, we return gracefully instead of throwing
+    // an uncaught exception that would crash the entire React application
+    return;
+  }
+
   console.error('Firestore Error: ', JSON.stringify(errInfo));
   throw new Error(JSON.stringify(errInfo));
 }

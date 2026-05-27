@@ -42,6 +42,20 @@ export default function SharedLayout({ children }: { children: React.ReactNode }
   const [isMobileFeatureOpen, setIsMobileFeatureOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const [isQuotaExceeded, setIsQuotaExceeded] = useState(() => {
+    return typeof window !== 'undefined' ? !!(window as any).__firestoreQuotaExceeded : false;
+  });
+
+  useEffect(() => {
+    const handleQuota = () => {
+      setIsQuotaExceeded(true);
+    };
+    window.addEventListener('firestore-quota-exceeded', handleQuota);
+    return () => {
+      window.removeEventListener('firestore-quota-exceeded', handleQuota);
+    };
+  }, []);
+
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
@@ -90,11 +104,62 @@ export default function SharedLayout({ children }: { children: React.ReactNode }
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background selection:bg-primary/20 relative">
+    <div className={cn(
+      "min-h-screen flex flex-col bg-background selection:bg-primary/20 relative transition-all duration-300",
+      isQuotaExceeded ? "pt-[112px] md:pt-16" : ""
+    )}>
       {/* NO noise-overlay here to ensure super fast page frame rates on both mobile and desktop! */}
       
+      {/* Quota limit warning banner */}
+      <AnimatePresence>
+        {isQuotaExceeded && (
+          <motion.div 
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-0 left-0 right-0 min-h-[112px] md:h-16 bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2 px-4 md:px-6 text-center select-none shadow-md flex flex-col md:flex-row items-center justify-between gap-3 z-[60] border-b border-amber-600 font-sans"
+          >
+            <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm font-medium leading-normal text-left max-w-5xl">
+              <span className="bg-white/20 px-2 py-0.5 rounded text-white font-bold text-[9px] tracking-wider uppercase">PERHATIAN</span>
+              <p className="text-[11px] md:text-xs">
+                <strong>Firebase Quota Exceeded!</strong> Limit baca harian gratis database Firestore Anda habis. Limit akan <strong>reset otomatis keesokan harinya</strong>. Detail kuota Spark plan berada di kolom <strong>Spark</strong> bagian <strong>Enterprise edition</strong> di{' '}
+                <a 
+                  href="https://firebase.google.com/pricing#cloud-firestore" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="underline font-bold hover:text-amber-100 transition-all uppercase tracking-wider"
+                >
+                  Halaman Harga Firebase
+                </a>.
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-2 justify-center shrink-0 w-full md:w-auto">
+              <a 
+                href="https://console.firebase.google.com/project/gen-lang-client-0486192242/firestore/databases/ai-studio-67ed07be-d226-4036-90ce-c0efec83e79b/data?openUpgradeDialog=true" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="bg-slate-950 text-white hover:bg-slate-900 px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider shadow transition-transform hover:scale-[1.02] active:scale-[0.98] text-center"
+              >
+                UPGRADE DATABASE KONSOL
+              </a>
+              <button 
+                onClick={() => setIsQuotaExceeded(false)}
+                className="bg-white/10 hover:bg-white/20 p-1.5 rounded-lg text-white transition-all cursor-pointer absolute top-2 right-2 md:relative md:top-auto md:right-auto"
+                aria-label="Tutup"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 h-20 px-4 md:px-6 lg:px-12 flex items-center justify-between border-b border-slate-200 dark:border-white/5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md z-50 transition-all">
+      <nav className={cn(
+        "fixed left-0 right-0 h-20 px-4 md:px-6 lg:px-12 flex items-center justify-between border-b border-slate-200 dark:border-white/5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md z-50 transition-all",
+        isQuotaExceeded ? "top-[112px] md:top-16" : "top-0"
+      )}>
         <Link to="/" className="flex items-center group shrink-0">
           <LogoIcon 
             className="w-44 h-16 md:w-56 md:h-20 bg-primary rounded-xl shadow-lg shadow-primary/20 transition-all" 
