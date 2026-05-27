@@ -426,7 +426,7 @@ export default function Shop() {
                   className={cn(
                     "inline-block relative select-none transition-all duration-300",
                     isOctagonal 
-                      ? "p-[1.5px] bg-gradient-to-b from-white via-white/90 to-white/40 dark:from-white/40 dark:via-white/20 dark:to-white/5 shadow-inner animate-pulse border-transparent" 
+                      ? "p-[1.5px] bg-gradient-to-b from-slate-350 via-slate-200/90 to-slate-100/40 dark:from-white/40 dark:via-white/20 dark:to-white/5 shadow-inner animate-pulse border-transparent" 
                       : "bg-white/10 dark:bg-slate-900/10 p-2 border-2 border-slate-300/80 dark:border-white/15",
                     isSquare ? "rounded-[32px]" : isRectangle ? "rounded-[20px]" : "rounded-none"
                   )}
@@ -486,9 +486,6 @@ export default function Shop() {
                           "absolute -bottom-[0.5px] -inset-x-[0.5px] bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 z-20 flex flex-col justify-center overflow-hidden",
                           isSquare ? "rounded-b-[23.5px]" : isRectangle ? "rounded-b-[13.5px]" : "rounded-none"
                         )}
-                        style={{
-                          clipPath: isOctagonal ? octagonalClip : 'none'
-                        }}
                       >
                         <p className="text-[9px] font-black text-white leading-tight truncate">
                           {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
@@ -581,7 +578,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                     PILIH KATALOG GANCI STANDAR
+                    🛍️ PILIH KATALOG GANCI STANDAR
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -642,7 +639,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                       PILIH MODEL KUSTOMISASI
+                      ⚙️ PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
