@@ -481,10 +481,15 @@ export default function Shop() {
                       />
 
                       {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
-                      <div className={cn(
-                        "absolute -bottom-[0.5px] -inset-x-[0.5px] bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 z-20 flex flex-col justify-center overflow-hidden",
-                        isSquare ? "rounded-b-[23.5px]" : isRectangle ? "rounded-b-[13.5px]" : "rounded-none"
-                      )}>
+                      <div 
+                        className={cn(
+                          "absolute -bottom-[0.5px] -inset-x-[0.5px] bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 z-20 flex flex-col justify-center overflow-hidden",
+                          isSquare ? "rounded-b-[23.5px]" : isRectangle ? "rounded-b-[13.5px]" : "rounded-none"
+                        )}
+                        style={{
+                          clipPath: isOctagonal ? octagonalClip : 'none'
+                        }}
+                      >
                         <p className="text-[9px] font-black text-white leading-tight truncate">
                           {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
                         </p>

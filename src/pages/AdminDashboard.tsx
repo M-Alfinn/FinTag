@@ -245,7 +245,7 @@ export default function AdminDashboard() {
     .map((p: any) => p.name);
 
   const availableTemplateNames = Array.from(
-    { length: 10 },
+    { length: 50 },
     (_, i) => `Template ${i + 1}`,
   ).filter((name) => !existingTemplateNames.includes(name));
 
@@ -259,7 +259,7 @@ export default function AdminDashboard() {
     .map((p: any) => p.name);
 
   const availableTemplateNamesEditing = Array.from(
-    { length: 10 },
+    { length: 50 },
     (_, i) => `Template ${i + 1}`,
   ).filter((name) => !existingTemplateNamesEditing.includes(name));
 
@@ -2632,7 +2632,7 @@ export default function AdminDashboard() {
                         const firstAvailable =
                           sub === "template"
                             ? Array.from(
-                                { length: 10 },
+                                { length: 50 },
                                 (_, i) => `Template ${i + 1}`,
                               ).filter(
                                 (n) =>
@@ -2900,7 +2900,7 @@ export default function AdminDashboard() {
                         const firstAvailable =
                           sub === "template"
                             ? Array.from(
-                                { length: 10 },
+                                { length: 50 },
                                 (_, i) => `Template ${i + 1}`,
                               ).filter(
                                 (n) =>
