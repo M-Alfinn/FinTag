@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial record of an expense",
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["amount", "category", "date", "userId"]
+    },
+    "UserConfig": {
+      "title": "UserConfig",
+      "description": "User specific configurations like budget",
+      "type": "object",
+      "properties": {
+        "budget": { "type": "number" },
+        "userId": { "type": "string" }
+      },
+      "required": ["budget", "userId"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Item available in the shop",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "image": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["name", "price"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Record of a purchase",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "selesai"] },
+        "date": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["productId", "status", "date", "userId"]
+    },
+    "Song": {
+      "title": "Song",
+      "description": "A musical track",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "artist": { "type": "string" },
+        "url": { "type": "string" },
+        "cover": { "type": "string" }
+      },
+      "required": ["title", "artist", "url"]
+    },
+    "AdminEmail": {
+      "title": "AdminEmail",
+      "description": "Allowed admin email address",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "addedBy": { "type": "string" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "/admins/{email}": {
+      "schema": "AdminEmail",
+      "description": "Allowed administrator emails"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "User financial transactions"
+    },
+    "/userConfigs/{userId}": {
+      "schema": "UserConfig",
+      "description": "User settings and budget"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Available products"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders"
+    },
+    "/music/{songId}": {
+      "schema": "Song",
+      "description": "Playlist content"
+    }
+  }
+}

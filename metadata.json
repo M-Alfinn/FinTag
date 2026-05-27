@@ -1,0 +1,13 @@
+{
+  "name": "Remix: Remix: Remix: FinTag - Tap Smart, Track Smart",
+  "description": "Modern financial tracking platform with NFC integration and student productivity tools.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "fintech",
+    "ecommerce",
+    "gaming",
+    "productivity"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/tracker/:id",
+      "destination": "/api/tracker?id=$id"
+    },
+    {
+      "source": "/api/products/:id",
+      "destination": "/api/products?id=$id"
+    },
+    {
+      "source": "/api/music/:id",
+      "destination": "/api/music?id=$id"
+    },
+    {
+      "source": "/api/orders/:id/status",
+      "destination": "/api/orders?id=$id&action=status"
+    },
+    {
+      "source": "/api/orders/:id",
+      "destination": "/api/orders?id=$id"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "name": "Gantungan Kunci NFC Pro",
+    "price": 25000,
+    "image": "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=400",
+    "description": "Gantungan kunci NFC premium dengan desain minimalis. Tahan air, awet, dan sangat praktis."
+  },
+  {
+    "id": "2",
+    "name": "FinTag Card Pro",
+    "price": 50000,
+    "image": "https://images.unsplash.com/photo-1625591338076-905a0980907e?auto=format&fit=crop&q=80&w=400",
+    "description": "Kartu NFC eksklusif dengan finish doff yang elegan. Cocok untuk pengganti kartu nama atau ID card."
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "title": "Minum Air 2L",
+    "category": "Health",
+    "icon": "Droplets",
+    "stars": 1
+  },
+  {
+    "id": "2",
+    "title": "No Jajan Hari Ini",
+    "category": "Finance",
+    "icon": "Wallet",
+    "stars": 2
+  },
+  {
+    "id": "3",
+    "title": "Jalan 5000 Langkah",
+    "category": "Fitness",
+    "icon": "Footprints",
+    "stars": 2
+  }
+]
