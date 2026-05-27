@@ -481,21 +481,36 @@ export default function Shop() {
                       />
 
                       {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
-                      <div 
-                        className={cn(
-                          "absolute bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 z-20 flex flex-col justify-center overflow-hidden",
-                          isOctagonal
-                            ? "bottom-0 inset-x-0 rounded-none"
-                            : isSquare
+                      {!isOctagonal && (
+                        <div 
+                          className={cn(
+                            "absolute bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 z-20 flex flex-col justify-center overflow-hidden",
+                            isSquare
                               ? "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[23.5px]"
                               : "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[13.5px]"
-                        )}
+                          )}
+                        >
+                          <p className="text-[9px] font-black text-white leading-tight truncate">
+                            {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* If octagonal, place it as a sibling of the inner sheet (inside the Bevel layer) */}
+                    {isOctagonal && (
+                      <div 
+                        className="absolute bottom-0 inset-x-0 bg-slate-950/95 backdrop-blur-md px-3 text-center border-t border-white/15 z-30 flex flex-col justify-center overflow-hidden"
+                        style={{
+                          height: '32px',
+                          clipPath: octagonalClip
+                        }}
                       >
                         <p className="text-[9px] font-black text-white leading-tight truncate">
                           {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
                         </p>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </motion.div>
               );
@@ -582,7 +597,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                    🛍️ PILIH KATALOG GANCI STANDAR
+                     PILIH KATALOG GANCI STANDAR
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -643,7 +658,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                      ⚙️ PILIH MODEL KUSTOMISASI
+                       PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
