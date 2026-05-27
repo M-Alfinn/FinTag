@@ -184,7 +184,7 @@ export default function Shop() {
 
   // Customization cost: Rp 2.000 customized fee is added when Custom Mode is chosen.
   const basePrice = selectedMode === 'custom' 
-    ? (customType === 'formal' ? Number(activeFormalProduct?.price || 15000) : Number(activeTemplateProduct?.price || 15000)) 
+    ? (customType === 'formal' ? Number(activeFormalProduct?.price || 15500) : Number(activeTemplateProduct?.price || 15500)) 
     : Number(activeProduct.price || 0);
   const customCost = selectedMode === 'custom' ? 2000 : 0;
   const unitPrice = basePrice + customCost;
@@ -426,7 +426,7 @@ export default function Shop() {
                   className={cn(
                     "inline-block relative select-none transition-all duration-300",
                     isOctagonal 
-                      ? "p-[1.5px] bg-gradient-to-b from-slate-350 via-slate-200/90 to-slate-100/40 dark:from-white/40 dark:via-white/20 dark:to-white/5 shadow-inner animate-pulse border-transparent" 
+                      ? "p-[1.5px] bg-gradient-to-b from-slate-350 via-slate-200/90 to-slate-100/40 dark:from-white/40 dark:via-white/20 dark:to-white/5 shadow-inner" 
                       : "bg-white/10 dark:bg-slate-900/10 p-2 border-2 border-slate-300/80 dark:border-white/15",
                     isSquare ? "rounded-[32px]" : isRectangle ? "rounded-[20px]" : "rounded-none"
                   )}
@@ -444,7 +444,7 @@ export default function Shop() {
                   <div
                     className={cn(
                       "w-full h-full flex items-center justify-center relative transition-all duration-300",
-                      isOctagonal ? "p-2 bg-white/20 dark:bg-slate-900/30" : ""
+                      isOctagonal ? "p-2 bg-white/25 dark:bg-slate-900/35" : ""
                     )}
                     style={{
                       clipPath: isOctagonal ? octagonalClip : 'none'
@@ -481,36 +481,31 @@ export default function Shop() {
                       />
 
                       {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
-                      {!isOctagonal && (
+                      <div
+                        className="absolute inset-0 z-20 pointer-events-none"
+                        style={{
+                          clipPath: isOctagonal ? octagonalClip : 'none'
+                        }}
+                      >
                         <div 
                           className={cn(
-                            "absolute bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 z-20 flex flex-col justify-center overflow-hidden",
-                            isSquare
-                              ? "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[23.5px]"
-                              : "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[13.5px]"
+                            "absolute bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 pointer-events-auto flex flex-col justify-center overflow-hidden",
+                            isOctagonal
+                              ? "bottom-0 inset-x-0 rounded-none"
+                              : isSquare
+                                ? "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[23.5px]"
+                                : "-bottom-[0.5px] -inset-x-[0.5px] rounded-b-[13.5px]"
                           )}
+                          style={{
+                            height: '32px'
+                          }}
                         >
                           <p className="text-[9px] font-black text-white leading-tight truncate">
                             {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
                           </p>
                         </div>
-                      )}
-                    </div>
-
-                    {/* If octagonal, place it as a sibling of the inner sheet (inside the Bevel layer) */}
-                    {isOctagonal && (
-                      <div 
-                        className="absolute bottom-0 inset-x-0 bg-slate-950/95 backdrop-blur-md px-3 text-center border-t border-white/15 z-30 flex flex-col justify-center overflow-hidden"
-                        style={{
-                          height: '32px',
-                          clipPath: octagonalClip
-                        }}
-                      >
-                        <p className="text-[9px] font-black text-white leading-tight truncate">
-                          {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
-                        </p>
                       </div>
-                    )}
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -673,7 +668,7 @@ export default function Shop() {
                         )}
                       >
                         <FileText className={cn("w-3.5 h-3.5", customType === 'formal' ? "text-purple-500" : "text-slate-400")} />
-                        <span className="text-xs uppercase tracking-wide">Formal</span>
+                        <span className="text-xs uppercase tracking-wide px-1">Formal</span>
                       </button>
 
                       <button
@@ -687,7 +682,7 @@ export default function Shop() {
                         )}
                       >
                         <Layers className={cn("w-3.5 h-3.5", customType === 'template' ? "text-purple-500" : "text-slate-400")} />
-                        <span className="text-xs uppercase tracking-wide">Template</span>
+                        <span className="text-xs uppercase tracking-wide px-1">Template</span>
                       </button>
                     </div>
                   </div>
@@ -859,7 +854,7 @@ export default function Shop() {
                 type="submit" 
                 className="bg-emerald-500 hover:bg-emerald-400 px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-[0.98] group flex items-center gap-1.5 cursor-pointer font-bold shrink-0 text-white"
               >
-                <span className="text-xs uppercase tracking-wider font-extrabold">PESAN (WA)</span>
+                <span className="text-xs uppercase tracking-wider font-extrabold font-sans">PESAN WIDGET</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -890,71 +885,58 @@ export default function Shop() {
                 <ShoppingBag className="w-7 h-7" />
               </div>
 
-              <div className="space-y-1">
-                <h3 className="text-xl font-heading font-black text-slate-900 dark:text-white uppercase tracking-tight">KIRIM PESANAN KE WHATSAPP?</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed px-1">
-                  Kami akan mengalihkan Anda secara otomatis dan menyalin teks pesanan instan ke Admin WhatsApp FinTag store. Selamat berbelanja!
+              <div className="space-y-2">
+                <h3 className="text-lg font-heading font-black text-slate-900 dark:text-white uppercase tracking-tight">KONFIRMASI PESANAN</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Pesanan ganci Anda siap dikirimkan ke Admin wa.me kami. Harap pastikan nomor WA Anda sudah aktif.
                 </p>
               </div>
 
-              {/* Order Specs Grid list box */}
-              <div className="bg-slate-50 dark:bg-slate-950 px-5 py-4 rounded-3xl border border-slate-100 dark:border-white/5 space-y-3 text-left font-sans text-xs">
-                <div className="flex justify-between items-baseline">
-                  <span className="text-slate-400">Item Produk:</span>
-                  <span className="text-slate-900 dark:text-white font-bold text-right truncate max-w-[200px]">
-                    {selectedMode === 'standard' ? activeProduct.name : 'Ganti Custom'}
+              <div className="bg-slate-50 dark:bg-slate-950/40 p-5 rounded-3xl border border-slate-150 dark:border-white/5 space-y-2.5 text-xs text-left">
+                <div className="flex justify-between leading-none">
+                  <span className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">Nama:</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white truncate max-w-[200px]">{form.name}</span>
+                </div>
+                <div className="flex justify-between leading-none">
+                  <span className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">Nomor WA:</span>
+                  <span className="font-mono font-extrabold text-slate-900 dark:text-white">{form.whatsapp}</span>
+                </div>
+                <div className="flex justify-between leading-none">
+                  <span className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">Desain:</span>
+                  <span className="font-extrabold text-slate-950 dark:text-slate-200 truncate max-w-[200px]">
+                    {selectedMode === 'standard' ? activeProduct.name : `Kustomisasi ${customType === 'formal' ? 'Formal' : 'Template'}`}
                   </span>
                 </div>
-
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Model Desain:</span>
-                  <span className="text-slate-900 dark:text-white font-bold">
-                    {selectedMode === 'standard' ? 'Opsi 1: Standar' : 'Opsi 2: Ganci Custom'}
-                  </span>
-                </div>
-
-                {selectedMode === 'custom' && (
-                  <div className="flex justify-between items-baseline">
-                    <span className="text-slate-400">Pilihan Custom:</span>
-                    <span className="text-slate-900 dark:text-white font-bold text-right truncate max-w-[200px]">
-                      {customType === 'formal' ? `Pas Foto ke-${selectedFormalIdx + 1}` : `Template ke-${selectedTemplateIdx + 1}`}
-                    </span>
-                  </div>
-                )}
-
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Bentuk Akrilik:</span>
-                  <span className="text-slate-900 dark:text-white font-bold uppercase text-[10px]">
+                <div className="flex justify-between leading-none">
+                  <span className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">Bentuk:</span>
+                  <span className="font-extrabold text-slate-950 dark:text-slate-200 justify-end flex">
                     {selectedShape === 'persegi' ? 'Persegi' : selectedShape === 'panjang' ? 'Persegi Panjang' : 'Oktagonal'}
                   </span>
                 </div>
-
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Kuantitas Beli:</span>
-                  <span className="text-slate-900 dark:text-white font-bold">{form.quantity} Unit / Pcs</span>
+                <div className="flex justify-between leading-none">
+                  <span className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">Jumlah:</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white">{form.quantity} pcs</span>
                 </div>
-
-                <div className="flex justify-between border-t border-dashed border-slate-200 dark:border-white/10 pt-2 text-sm font-black">
-                  <span className="text-slate-800 dark:text-slate-300">Total Harga:</span>
-                  <span className="text-emerald-500">{formatRupiah(totalPrice)}</span>
+                <div className="border-t border-slate-200 dark:border-white/10 pt-2.5 flex justify-between items-center">
+                  <span className="text-slate-900 dark:text-slate-300 font-extrabold uppercase tracking-widest text-[10px]">Total Pembayaran:</span>
+                  <span className="text-emerald-500 font-heading font-black text-sm">{formatRupiah(totalPrice)}</span>
                 </div>
               </div>
 
-              {/* Confirm Decisions Button Row */}
-              <div className="flex gap-4 pt-2">
+              <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => setIsConfirming(false)}
-                  className="flex-1 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl font-black text-[10px] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 uppercase tracking-widest border border-slate-100 dark:border-white/5 transition-colors cursor-pointer"
+                  className="bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer"
                 >
-                  BATAL
+                  Kembali
                 </button>
                 <button
                   type="button"
                   onClick={executeOrderCheckOut}
-                  className="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-black text-[10px] hover:bg-emerald-400 shadow-md transition-all uppercase tracking-widest cursor-pointer"
+                  className="bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-wider shadow-md transition-all active:scale-[0.98] cursor-pointer"
                 >
-                  KIRIM (CHAT WA)
+                  Kirim Pesan (WA)
                 </button>
               </div>
             </motion.div>
