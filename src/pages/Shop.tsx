@@ -425,14 +425,12 @@ export default function Shop() {
                   transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                   className={cn(
                     "inline-block relative select-none transition-all duration-300",
-                    isOctagonal 
-                      ? "p-[7px] bg-gradient-to-b from-slate-200 to-slate-350 dark:from-slate-700/90 dark:to-slate-800/90" 
-                      : "bg-white/10 dark:bg-slate-900/10 p-2 border-2 border-slate-300/80 dark:border-white/15",
+                    "bg-white/10 dark:bg-slate-900/10 p-2 border-2 border-slate-300/80 dark:border-white/15",
                     isSquare ? "rounded-[32px]" : isRectangle ? "rounded-[20px]" : "rounded-none"
                   )}
                   style={{
                     ...getMockupDimensions(imgAspect),
-                    boxShadow: isOctagonal ? 'none' : '0 15px 35px -10px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.3)',
+                    boxShadow: '0 15px 35px -10px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.3)',
                     clipPath: isOctagonal ? octagonalClip : 'none',
                     filter: isOctagonal ? 'drop-shadow(0 12px 24px rgba(0,0,0,0.22)) drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none'
                   }}
@@ -444,9 +442,7 @@ export default function Shop() {
                   <div
                     className={cn(
                       "w-full h-full relative transition-all duration-300 overflow-hidden bg-white dark:bg-slate-950 flex flex-col justify-center items-center transform-gpu isolate",
-                      isOctagonal 
-                        ? "" 
-                        : "border border-slate-100 dark:border-white/5",
+                      "border border-slate-100 dark:border-white/5",
                       isSquare ? "rounded-[24px]" : isRectangle ? "rounded-[14px]" : "rounded-none"
                     )}
                     style={{
@@ -472,23 +468,6 @@ export default function Shop() {
                       alt="Acrylic Ganci Mockup"
                       referrerPolicy="no-referrer"
                     />
-
-                    {/* Bottom elegant info overlay tag inside keyholder - matches border corners */}
-                    <div className="absolute bottom-[-0.5px] -inset-x-[0.5px] z-20 pointer-events-auto">
-                      <div 
-                        className={cn(
-                          "bg-slate-950/85 backdrop-blur-md px-2 py-1.5 text-center border-t border-white/15 flex flex-col justify-center overflow-hidden shadow-[0_-2px_10px_rgba(0,0,0,0.05)]",
-                          isSquare ? "rounded-b-[23.5px]" : isRectangle ? "rounded-b-[13.5px]" : "rounded-none"
-                        )}
-                        style={{
-                          height: '32px'
-                        }}
-                      >
-                        <p className="text-[9px] font-black text-white leading-tight truncate">
-                          {selectedMode === 'standard' ? activeProduct.name : `Custom: ${customType === 'formal' ? 'Formal' : 'Template'}`}
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </motion.div>
               );
@@ -575,7 +554,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                    🛍️ PILIH KATALOG GANCI STANDAR
+                     PILIH KATALOG GANCI STANDAR
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -636,7 +615,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                      ⚙️ PILIH MODEL KUSTOMISASI
+                       PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
