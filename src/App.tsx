@@ -47,8 +47,12 @@ export default function App() {
               </Routes>
             </AnimatePresence>
           </SharedLayout>
-          <WeatherWidget />
-          <AIChatBubble />
+          {!(typeof window !== 'undefined' && window.location.search.includes('view=3b8c2d96')) && (
+            <>
+              <WeatherWidget />
+              <AIChatBubble />
+            </>
+          )}
         </MusicProvider>
       </AuthProvider>
     </Router>

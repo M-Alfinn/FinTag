@@ -466,7 +466,7 @@ export default function Shop() {
               const isRectangle = selectedShape === 'panjang';
               const octagonalClip = 'polygon(15% 0%, 85% 0%, 100% 12%, 100% 88%, 85% 100%, 15% 100%, 0% 88%, 0% 12%)';
 
-              return (
+              const cardContent = (
                 <motion.div 
                   key={`${selectedMode}-${customType}-${selectedFormalIdx}-${selectedTemplateIdx}-${activeProductIdx}-${selectedShape}`}
                   initial={{ scale: 0.95, rotate: -1, y: 3 }}
@@ -481,9 +481,8 @@ export default function Shop() {
                   )}
                   style={{
                     ...getMockupDimensions(imgAspect),
-                    boxShadow: '0 15px 35px -10px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.3)',
+                    boxShadow: isOctagonal ? 'none' : '0 15px 35px -10px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.3)',
                     clipPath: isOctagonal ? octagonalClip : 'none',
-                    filter: isOctagonal ? 'drop-shadow(0 12px 24px rgba(0,0,0,0.22)) drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none'
                   }}
                 >
                   {/* Top tiny punch hole inner hole */}
@@ -496,7 +495,7 @@ export default function Shop() {
                       preserveAspectRatio="none"
                     >
                       <polygon 
-                        points="153,8 847,8 992,125 992,875 847,992 153,992 8,875 8,125" 
+                        points="152,4 848,4 996,122 996,878 848,996 152,996 4,878 4,122" 
                         fill="none" 
                         stroke="currentColor" 
                         strokeWidth="2"
@@ -539,6 +538,21 @@ export default function Shop() {
                   </div>
                 </motion.div>
               );
+
+              if (isOctagonal) {
+                return (
+                  <div 
+                    style={{
+                      filter: 'drop-shadow(0 15px 32px rgba(0,0,0,0.12))'
+                    }}
+                    className="inline-block relative"
+                  >
+                    {cardContent}
+                  </div>
+                );
+              }
+
+              return cardContent;
             })()}
 
             {/* Drop shadow of the ganci */}
