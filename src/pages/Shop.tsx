@@ -636,7 +636,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                    🛍️ PILIH KATALOG GANCI STANDAR
+                     PILIH KATALOG GANCI STANDAR
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -697,7 +697,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                      ⚙️ PILIH MODEL KUSTOMISASI
+                       PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
