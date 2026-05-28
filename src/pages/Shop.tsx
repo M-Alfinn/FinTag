@@ -269,7 +269,7 @@ export default function Shop() {
 
   // Customization cost: Rp 2.000 customized fee is added when Custom Mode is chosen.
   const basePrice = selectedMode === 'custom' 
-    ? (customType === 'formal' ? Number(activeFormalProduct?.price || 15500) : Number(activeTemplateProduct?.price || 15500)) 
+    ? (customType === 'formal' ? Number(activeFormalProduct?.price || 15000) : Number(activeTemplateProduct?.price || 15500)) 
     : Number(activeProduct.price || 0);
   const customCost = selectedMode === 'custom' ? 2000 : 0;
   const unitPrice = basePrice + customCost;
