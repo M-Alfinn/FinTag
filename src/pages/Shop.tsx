@@ -25,70 +25,70 @@ export const DEFAULT_PRODUCTS = [
     id: 'fintag-standard-1',
     name: 'Luffy',
     price: 15000,
-    image: '/public/products/Biasa/1.jpeg',
+    image: '/public/products/Biasa/6.jpeg',
     description: 'Gantungan kunci NFC premium berbahan akrilik transparan tebal dengan desain minimalis. Tahan benturan, tahan air, dan dilengkapi chip NFC original NTAG213 untuk pencatatan transaksi super instan.'
   },
   {
     id: 'fintag-standard-2',
-    name: 'Chainsaw Man (Don;t Want No)',
+    name: 'Chainsaw Man (Don`t Want No)',
     price: 15000,
-    image: '/public/products/Biasa/2.jpeg',
+    image: '/public/products/Biasa/5.png',
     description: 'Kemewahan minimalis bertekstur doff anti sidik jari dengan warna hitam solid premium yang sangat maskulin dan elegan.'
   },
   {
     id: 'fintag-standard-3',
     name: 'Siluet Pasangan',
     price: 15000,
-    image: '/public/products/Biasa/3.jpeg',
+    image: '/public/products/Biasa/8.jpeg',
     description: 'Memadukan keindahan tekstur serat kayu alami di bagian dalam akrilik hybrid tebal, menampilkan kesan vintage tangguh.'
   },
   {
     id: 'fintag-standard-4',
     name: 'Well don`t you sit on front of me',
     price: 15000,
-    image: '/public/products/Biasa/4.jpeg',
+    image: '/public/products/Biasa/9.jpeg',
     description: 'Edisi terbatas bertema laut dalam yang menenangkan. Menggunakan gradien semi-transparan biru laut artistik.'
   },
   {
     id: 'fintag-standard-5',
     name: 'But You Here',
     price: 15000,
-    image: '/public/products/Biasa/5.jpeg',
+    image: '/public/products/Biasa/3.jpeg',
     description: 'Gaya modern dengan pinggiran fluorosens neon cerah yang menyala redup saat ditempat gelap.'
   },
   {
     id: 'fintag-standard-6',
     name: 'But i could never ask you for help',
     price: 15000,
-    image: '/public/products/Biasa/6.jpeg',
+    image: '/public/products/Biasa/4.jpeg',
     description: 'Tampilan indah terinspirasi dari bunga sakura segar bergaya pastel lembut berestetika tinggi.'
   },
   {
     id: 'fintag-standard-7',
     name: 'Chainsaw Man (Komik)',
     price: 15000,
-    image: '/public/products/Biasa/7.jpeg',
+    image: '/public/products/Biasa/1.jpeg',
     description: 'Sentuhan kulit sintetis berkualitas premium dijahit rapi melingkari akrilik tebal yang berisi chip NFC original.'
   },
   {
     id: 'fintag-standard-8',
     name: 'If we do our...',
     price: 15000,
-    image: '/public/products/Biasa/8.jpeg',
+    image: '/public/products/Biasa/7.jpeg',
     description: 'Warna gradien langit malam aurora indah yang berkilau lembut saat tertimpa cahaya matahari.'
   },
   {
     id: 'fintag-standard-9',
     name: 'Wait for me',
     price: 15000,
-    image: '/public/products/Biasa/9.jpeg',
+    image: '/public/products/Biasa/10.jpg',
     description: 'Warna merah menyala berani dengan kontras aksen hitam solid yang tangguh untuk aktivitas outdoor.'
   },
   {
     id: 'fintag-standard-10',
     name: 'Ku aman ada bersama mu',
     price: 15000,
-    image: '/public/products/Biasa/10.jpg',
+    image: '/public/products/Biasa/2.jpg',
     description: 'Sentuhan mewah bertabur serpihan foil emas sintetis berkilau di dalam bingkai akrilik berkepadatan tinggi.'
   }
 ];

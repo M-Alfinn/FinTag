@@ -108,61 +108,65 @@ export default function SharedLayout({ children }: { children: React.ReactNode }
   return (
     <div className={cn(
       "min-h-screen flex flex-col bg-background selection:bg-primary/20 relative transition-all duration-300",
-      isQuotaExceeded && !isShopOnly ? "pt-[112px] md:pt-16" : ""
+      isShopOnly ? "" : "pt-20"
     )}>
       {/* NO noise-overlay here to ensure super fast page frame rates on both mobile and desktop! */}
       
-      {/* Quota limit warning banner */}
+      {/* Quota limit warning toast - strictly for Administrator area, beautifully simple */}
       <AnimatePresence>
-        {isQuotaExceeded && !isShopOnly && (
+        {isQuotaExceeded && location.pathname === '/admin' && (
           <motion.div 
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            className="fixed top-0 left-0 right-0 min-h-[112px] md:h-16 bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2 px-4 md:px-6 text-center select-none shadow-md flex flex-col md:flex-row items-center justify-between gap-3 z-[60] border-b border-amber-600 font-sans"
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-6 right-4 sm:right-6 left-4 sm:left-auto md:max-w-md bg-white dark:bg-slate-900 border-l-4 border-amber-500 rounded-xl shadow-2xl p-4 flex gap-3.5 z-[9999] select-none text-slate-700 dark:text-slate-200"
           >
-            <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm font-medium leading-normal text-left max-w-5xl">
-              <span className="bg-white/20 px-2 py-0.5 rounded text-white font-bold text-[9px] tracking-wider uppercase">PERHATIAN</span>
-              <p className="text-[11px] md:text-xs">
-                <strong>Firebase Quota Exceeded!</strong> Limit baca harian gratis database Firestore Anda habis. Limit akan <strong>reset otomatis keesokan harinya</strong>. Detail kuota Spark plan berada di kolom <strong>Spark</strong> bagian <strong>Enterprise edition</strong> di{' '}
+            <div className="bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 p-2 rounded-lg self-start">
+              <Info className="w-5 h-5 animate-pulse" />
+            </div>
+            
+            <div className="flex-1 min-w-0 pr-1">
+              <h4 className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1">
+                Firebase Quota Exceeded!
+              </h4>
+              <p className="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-3">
+                Limit baca gratis harian database Firestore Anda habis. Data katalog beralih ke cache lokal. Limit reset otomatis besok.
+              </p>
+              
+              <div className="flex items-center gap-3">
+                <a 
+                  href="https://console.firebase.google.com/project/gen-lang-client-0486192242/firestore/databases/ai-studio-67ed07be-d226-4036-90ce-c0efec83e79b/data?openUpgradeDialog=true" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider shadow-sm transition-all"
+                >
+                  UPGRADE KONSOL
+                </a>
                 <a 
                   href="https://firebase.google.com/pricing#cloud-firestore" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="underline font-bold hover:text-amber-100 transition-all uppercase tracking-wider"
+                  className="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 text-[10px] font-bold underline transition-all"
                 >
-                  Halaman Harga Firebase
-                </a>.
-              </p>
+                  Cek Tarif
+                </a>
+              </div>
             </div>
             
-            <div className="flex items-center gap-2 justify-center shrink-0 w-full md:w-auto">
-              <a 
-                href="https://console.firebase.google.com/project/gen-lang-client-0486192242/firestore/databases/ai-studio-67ed07be-d226-4036-90ce-c0efec83e79b/data?openUpgradeDialog=true" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="bg-slate-950 text-white hover:bg-slate-900 px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider shadow transition-transform hover:scale-[1.02] active:scale-[0.98] text-center"
-              >
-                UPGRADE DATABASE KONSOL
-              </a>
-              <button 
-                onClick={() => setIsQuotaExceeded(false)}
-                className="bg-white/10 hover:bg-white/20 p-1.5 rounded-lg text-white transition-all cursor-pointer absolute top-2 right-2 md:relative md:top-auto md:right-auto"
-                aria-label="Tutup"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            <button 
+              onClick={() => setIsQuotaExceeded(false)}
+              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 self-start p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all"
+              aria-label="Tutup"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
       
       {/* Navbar */}
       {!isShopOnly && (
-        <nav className={cn(
-          "fixed left-0 right-0 h-20 px-4 md:px-6 lg:px-12 flex items-center justify-between border-b border-slate-200 dark:border-white/5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md z-50 transition-all",
-          isQuotaExceeded ? "top-[112px] md:top-16" : "top-0"
-        )}>
+        <nav className="fixed left-0 right-0 h-20 px-4 md:px-6 lg:px-12 flex items-center justify-between border-b border-slate-200 dark:border-white/5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md z-50 transition-all top-0">
           <Link to="/" className="flex items-center group shrink-0">
             <LogoIcon 
               className="w-44 h-16 md:w-56 md:h-20 bg-primary rounded-xl shadow-lg shadow-primary/20 transition-all" 
