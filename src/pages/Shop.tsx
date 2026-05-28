@@ -507,7 +507,7 @@ export default function Shop() {
           >
             <ImageIcon className={cn("w-4.5 h-4.5", selectedMode === 'standard' ? "text-emerald-400" : "text-slate-400")} />
             <span className={cn("text-xs font-black uppercase tracking-wide", selectedMode === 'standard' ? "text-white" : "text-slate-900 dark:text-slate-100")}>
-              Ganci Standar
+              Ganci Random
             </span>
           </button>
 
@@ -716,7 +716,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                    🛍️ PILIH KATALOG GANCI STANDAR
+                     PILIH KATALOG GANCI RANDOM
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -777,7 +777,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                      ⚙️ PILIH MODEL KUSTOMISASI
+                       PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
@@ -978,7 +978,7 @@ export default function Shop() {
                 type="submit" 
                 className="bg-emerald-500 hover:bg-emerald-400 px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-[0.98] group flex items-center gap-1.5 cursor-pointer font-bold shrink-0 text-white"
               >
-                <span className="text-xs uppercase tracking-wider font-extrabold font-sans">PESAN WIDGET</span>
+                <span className="text-xs uppercase tracking-wider font-extrabold font-sans">PESAN GANCI</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
