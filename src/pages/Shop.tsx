@@ -16,24 +16,85 @@ import {
 
 // Fallback catalog products in case the database is empty initially.
 // These are loaded dynamically from Admin Dashboard 'products' collection.
+// CARA MENGGUNAKAN GAMBAR ANDA SENDIRI:
+// 1. Buat folder bernama 'products' di dalam folder 'public' (maka jalurnya menjadi '/public/products/')
+// 2. Unggah gambar Anda ke folder tersebut (misal: 'ganci1.jpg')
+// 3. Ubah nilai properti 'image' di bawah menjadi '/products/ganci1.jpg'
 export const DEFAULT_PRODUCTS = [
   {
-    id: 'fintag-standard',
-    name: 'Gantungan NFC FinTag',
+    id: 'fintag-standard-1',
+    name: 'Gantungan NFC FinTag Clear Lite',
     price: 15000,
     image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=90&w=1200',
     description: 'Gantungan kunci NFC premium berbahan akrilik transparan tebal dengan desain minimalis. Tahan benturan, tahan air, dan dilengkapi chip NFC original NTAG213 untuk pencatatan transaksi super instan.'
   },
   {
-    id: 'fintag-card',
-    name: 'FinTag Card Pro',
-    price: 35000,
+    id: 'fintag-standard-2',
+    name: 'Gantungan NFC FinTag Matte Onyx',
+    price: 17000,
     image: 'https://images.unsplash.com/photo-1625591338076-905a0980907e?auto=format&fit=crop&q=90&w=1200',
-    description: 'Kartu NFC eksklusif dengan sentuhan finish doff premium hitam legam yang elegan. Cocok untuk ID card mahasiswa serbaguna, kartu nama digital, atau dompet pintar terintegrasi.'
+    description: 'Kemewahan minimalis bertekstur doff anti sidik jari dengan warna hitam solid premium yang sangat maskulin dan elegan.'
+  },
+  {
+    id: 'fintag-standard-3',
+    name: 'Gantungan NFC FinTag Classic Wood',
+    price: 18000,
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=90&w=1200',
+    description: 'Memadukan keindahan tekstur serat kayu alami di bagian dalam akrilik hybrid tebal, menampilkan kesan vintage tangguh.'
+  },
+  {
+    id: 'fintag-standard-4',
+    name: 'Gantungan NFC FinTag Ocean Wave',
+    price: 15000,
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=90&w=1200',
+    description: 'Edisi terbatas bertema laut dalam yang menenangkan. Menggunakan gradien semi-transparan biru laut artistik.'
+  },
+  {
+    id: 'fintag-standard-5',
+    name: 'Gantungan NFC FinTag Neon Pulse',
+    price: 16000,
+    image: 'https://images.unsplash.com/photo-1543536448-d209d2d13a1c?auto=format&fit=crop&q=90&w=1200',
+    description: 'Gaya modern dengan pinggiran fluorosens neon cerah yang menyala redup saat ditempat gelap.'
+  },
+  {
+    id: 'fintag-standard-6',
+    name: 'Gantungan NFC FinTag Sakura Blossom',
+    price: 15000,
+    image: 'https://images.unsplash.com/photo-1522441815192-d9f04eb0615c?auto=format&fit=crop&q=90&w=1200',
+    description: 'Tampilan indah terinspirasi dari bunga sakura segar bergaya pastel lembut berestetika tinggi.'
+  },
+  {
+    id: 'fintag-standard-7',
+    name: 'Gantungan NFC FinTag Leather Emblem',
+    price: 22000,
+    image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=90&w=1200',
+    description: 'Sentuhan kulit sintetis berkualitas premium dijahit rapi melingkari akrilik tebal yang berisi chip NFC original.'
+  },
+  {
+    id: 'fintag-standard-8',
+    name: 'Gantungan NFC FinTag Aurora Sky',
+    price: 15000,
+    image: 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=90&w=1200',
+    description: 'Warna gradien langit malam aurora indah yang berkilau lembut saat tertimpa cahaya matahari.'
+  },
+  {
+    id: 'fintag-standard-9',
+    name: 'Gantungan NFC FinTag Crimson Fire',
+    price: 15000,
+    image: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&q=90&w=1200',
+    description: 'Warna merah menyala berani dengan kontras aksen hitam solid yang tangguh untuk aktivitas outdoor.'
+  },
+  {
+    id: 'fintag-standard-10',
+    name: 'Gantungan NFC FinTag Celestial Gold',
+    price: 20000,
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=90&w=1200',
+    description: 'Sentuhan mewah bertabur serpihan foil emas sintetis berkilau di dalam bingkai akrilik berkepadatan tinggi.'
   }
 ];
 
 // EXACTLY 3 Custom Formal Example presets for demonstration
+// Cara mengganti gambar pas foto Anda: unggah gambar ke '/public/products/' lalu ubah jalurnya di sini.
 export const FORMAL_EXAMPLES = [
   {
     id: 'formal-mhs',
@@ -56,6 +117,7 @@ export const FORMAL_EXAMPLES = [
 ];
 
 // EXACTLY 10 Custom Template Example presets for demonstration
+// Tambahkan, kurangi, atau edit item di sini untuk menyesuaikan dengan katalog template Anda.
 export const TEMPLATE_EXAMPLES = [
   {
     id: 'tpl-spotify',
