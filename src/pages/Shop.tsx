@@ -23,72 +23,72 @@ import {
 export const DEFAULT_PRODUCTS = [
   {
     id: 'fintag-standard-1',
-    name: 'Gantungan NFC FinTag Clear Lite',
+    name: 'Luffy',
     price: 15000,
-    image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=90&w=1200',
+    image: '/public/products/Biasa/1.jpeg',
     description: 'Gantungan kunci NFC premium berbahan akrilik transparan tebal dengan desain minimalis. Tahan benturan, tahan air, dan dilengkapi chip NFC original NTAG213 untuk pencatatan transaksi super instan.'
   },
   {
     id: 'fintag-standard-2',
-    name: 'Gantungan NFC FinTag Matte Onyx',
-    price: 17000,
-    image: 'https://images.unsplash.com/photo-1625591338076-905a0980907e?auto=format&fit=crop&q=90&w=1200',
+    name: 'Chainsaw Man (Don;t Want No)',
+    price: 15000,
+    image: '/public/products/Biasa/2.jpeg',
     description: 'Kemewahan minimalis bertekstur doff anti sidik jari dengan warna hitam solid premium yang sangat maskulin dan elegan.'
   },
   {
     id: 'fintag-standard-3',
-    name: 'Gantungan NFC FinTag Classic Wood',
-    price: 18000,
-    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=90&w=1200',
+    name: 'Siluet Pasangan',
+    price: 15000,
+    image: '/public/products/Biasa/3.jpeg',
     description: 'Memadukan keindahan tekstur serat kayu alami di bagian dalam akrilik hybrid tebal, menampilkan kesan vintage tangguh.'
   },
   {
     id: 'fintag-standard-4',
-    name: 'Gantungan NFC FinTag Ocean Wave',
+    name: 'Well don`t you sit on front of me',
     price: 15000,
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=90&w=1200',
+    image: '/public/products/Biasa/4.jpeg',
     description: 'Edisi terbatas bertema laut dalam yang menenangkan. Menggunakan gradien semi-transparan biru laut artistik.'
   },
   {
     id: 'fintag-standard-5',
-    name: 'Gantungan NFC FinTag Neon Pulse',
-    price: 16000,
-    image: 'https://images.unsplash.com/photo-1543536448-d209d2d13a1c?auto=format&fit=crop&q=90&w=1200',
+    name: 'But You Here',
+    price: 15000,
+    image: '/public/products/Biasa/5.jpeg',
     description: 'Gaya modern dengan pinggiran fluorosens neon cerah yang menyala redup saat ditempat gelap.'
   },
   {
     id: 'fintag-standard-6',
-    name: 'Gantungan NFC FinTag Sakura Blossom',
+    name: 'But i could never ask you for help',
     price: 15000,
-    image: 'https://images.unsplash.com/photo-1522441815192-d9f04eb0615c?auto=format&fit=crop&q=90&w=1200',
+    image: '/public/products/Biasa/6.jpeg',
     description: 'Tampilan indah terinspirasi dari bunga sakura segar bergaya pastel lembut berestetika tinggi.'
   },
   {
     id: 'fintag-standard-7',
-    name: 'Gantungan NFC FinTag Leather Emblem',
-    price: 22000,
-    image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=90&w=1200',
+    name: 'Chainsaw Man (Komik)',
+    price: 15000,
+    image: '/public/products/Biasa/7.jpeg',
     description: 'Sentuhan kulit sintetis berkualitas premium dijahit rapi melingkari akrilik tebal yang berisi chip NFC original.'
   },
   {
     id: 'fintag-standard-8',
-    name: 'Gantungan NFC FinTag Aurora Sky',
+    name: 'If we do our...',
     price: 15000,
-    image: 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=90&w=1200',
+    image: '/public/products/Biasa/8.jpeg',
     description: 'Warna gradien langit malam aurora indah yang berkilau lembut saat tertimpa cahaya matahari.'
   },
   {
     id: 'fintag-standard-9',
-    name: 'Gantungan NFC FinTag Crimson Fire',
+    name: 'Wait for me',
     price: 15000,
-    image: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&q=90&w=1200',
+    image: '/public/products/Biasa/9.jpeg',
     description: 'Warna merah menyala berani dengan kontras aksen hitam solid yang tangguh untuk aktivitas outdoor.'
   },
   {
     id: 'fintag-standard-10',
-    name: 'Gantungan NFC FinTag Celestial Gold',
-    price: 20000,
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=90&w=1200',
+    name: 'Ku aman ada bersama mu',
+    price: 15000,
+    image: '/public/products/Biasa/10.jpg',
     description: 'Sentuhan mewah bertabur serpihan foil emas sintetis berkilau di dalam bingkai akrilik berkepadatan tinggi.'
   }
 ];
@@ -98,21 +98,27 @@ export const DEFAULT_PRODUCTS = [
 export const FORMAL_EXAMPLES = [
   {
     id: 'formal-mhs',
-    name: 'Pas Foto Almamater / Akademik',
-    desc: 'Latar belakang merah atau biru solid formal. Sangat cocok untuk kartu tanda mahasiswa (KTM) serbaguna.',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=90&w=1000'
+    name: 'Contoh 1',
+    desc: 'Contoh custom formal',
+    image: '/public/products/Custom Biasa/1.jpg'
   },
   {
     id: 'formal-portrait',
-    name: 'Foto Portrait Kasual Studio',
-    desc: 'Gaya foto portrait close-up semi-formal dengan pencahayaan lembut. Sangat personal dan tampak eksklusif.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=90&w=1000'
+    name: 'Contoh 2',
+    desc: 'Contoh custom formal.',
+    image: '/public/products/Custom Biasa/2.jpg'
   },
   {
     id: 'formal-idcard',
-    name: 'Kartu ID Profesional Karir',
-    desc: 'Bentuk pas foto identitas korporat modern. Menampilkan visual profesional yang rapi, bersih, dan impresif.',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=90&w=1000'
+    name: 'Contoh 3',
+    desc: 'Contoh custom formal.',
+    image: '/public/products/Custom Biasa/3.jpg'
+  },
+  {
+    id: 'formal-tia',
+    name: 'Contoh 4',
+    desc: 'Contoh custom formal.',
+    image: '/public/products/Custom Biasa/4.jpg'
   }
 ];
 
@@ -121,63 +127,69 @@ export const FORMAL_EXAMPLES = [
 export const TEMPLATE_EXAMPLES = [
   {
     id: 'tpl-spotify',
-    name: 'Spotify Music Player',
-    desc: 'Tampilan frame pemutar lagu lengkap dengan nama lagu favorit, artis, progress bar, dan scan barcode album.',
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 1',
+    desc: 'Contoh custom template',
+    image: '/public/products/Custom Template/template1.jpg'
   },
   {
     id: 'tpl-polaroid',
-    name: 'Retro Polaroid Snap',
-    desc: 'Desain frame foto polaroid putih klasik dengan tulisan tangan estetik, tanggal kenangan, dan filter vintage.',
-    image: 'https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 2',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template2.jpg'
   },
   {
     id: 'tpl-calendar',
-    name: 'Anniversary Calendar',
-    desc: 'Kalender minimalis menyorot tanggal jadian, ulang tahun, dll dengan penanda spidol tinta bentuk hati merah.',
-    image: 'https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 3',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template3.jpg'
   },
   {
     id: 'tpl-cyberpunk',
-    name: 'Neon Cyberpunk Hexa Grid',
-    desc: 'Gaya visual futuristik modern bertema sci-fi cyberpunk lengkap dengan aksen garis hologram neon bersinar.',
-    image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 4',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template4.jpg'
   },
   {
     id: 'tpl-ticket',
-    name: 'Concert Ticket Stub',
-    desc: 'Desain ganci mirip potongan tiket bioskop/konser retro antik lengkap dengan barcode dan info acara.',
-    image: 'https://images.unsplash.com/photo-1481134654431-4361516e5db4?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 5',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template5.jpg'
   },
   {
     id: 'tpl-chibi',
-    name: 'Cute Chibi Mascot',
-    desc: 'Kolase bingkai menggemaskan berisikan karakter hewan lucu bernuansa warna pastel cerah berbalut cinta.',
-    image: 'https://images.unsplash.com/photo-1520315342629-6ea920342047?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 6',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template6.jpg'
   },
   {
     id: 'tpl-comic',
-    name: 'Manga Comic Strip',
-    desc: 'Grid panel komik hitam putih ala manga jepang dengan bubble text percakapan kustom pilihan Anda.',
-    image: 'https://images.unsplash.com/photo-1560942485-b2a11cc13456?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 7',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template7.jpg'
   },
   {
     id: 'tpl-instagram',
-    name: 'Instagram Feed Grid',
-    desc: 'Kloning postingan medsos Instagram lengkap dengan tanda suka merah, username, and baris teks komentar.',
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 8',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template8.jpg'
   },
   {
     id: 'tpl-zodiac',
-    name: 'Cosmic Zodiac Chart',
-    desc: 'Peta rasi bintang zodiak romantis sesuai tanggal kelahiran bersanding dengan desain langit malam yang cerah.',
-    image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 9',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template9.jpg'
   },
   {
     id: 'tpl-memphis',
-    name: 'Neo-Memphis Geometric Art',
-    desc: 'Gaya seni modern tahun 90-an yang enerjik, sarat ornamen zig-zag, melingkar, and paduan warna ceria.',
-    image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&q=90&w=1000'
+    name: 'Template 10',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template10.jpg'
+  },
+  {
+    id: 'tpl-memii',
+    name: 'Template 11',
+    desc: 'Contoh custom template.',
+    image: '/public/products/Custom Template/template11.jpg'
   }
 ];
 
