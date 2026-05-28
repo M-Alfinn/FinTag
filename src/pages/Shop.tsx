@@ -193,10 +193,29 @@ export const TEMPLATE_EXAMPLES = [
   }
 ];
 
+// Normalisasi path gambar untuk Vite/Vercel (misal jika db berisi "/public/products/ganci1.jpg" atau "public/products/ganci1.jpg")
+export function normalizeImagePath(path: string | undefined): string {
+  if (!path) return '';
+  if (path.startsWith('data:')) return path; // Base64
+  if (path.startsWith('http://') || path.startsWith('https://')) return path; // Web URL
+  
+  let clean = path;
+  if (clean.startsWith('/public/')) {
+    clean = clean.substring(7);
+  } else if (clean.startsWith('public/')) {
+    clean = '/' + clean.substring(7);
+  }
+  
+  if (!clean.startsWith('/')) {
+    clean = '/' + clean;
+  }
+  return clean;
+}
+
 export default function Shop() {
   const { user, loginAsGuest } = useAuth();
-  const [dbProducts, setDbProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dbProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   
   // Interactive Shop Selection States
   const [activeProductIdx, setActiveProductIdx] = useState(0);
@@ -215,24 +234,11 @@ export default function Shop() {
 
   const [isConfirming, setIsConfirming] = useState(false);
 
-  // Synchronize product list in real-time from the admin's products collection!
+  // No real-time listener for products from Firestore to avoid rapid quota exhaustion.
+  // Catalog can be populated manually in VS Code as requested.
   useEffect(() => {
-    const q = query(collection(db, 'products'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setDbProducts(data);
-      setLoading(false);
-    }, (error) => {
-      console.warn("Firestore error, loading default catalog:", error);
-      const errMessage = error instanceof Error ? error.message : String(error);
-      const isQuotaError = errMessage.includes('Quota exceeded') || errMessage.includes('Quota limit exceeded') || errMessage.includes('quota');
-      if (isQuotaError) {
-        triggerQuotaExceeded();
-      }
-      setLoading(false);
-    });
-
-    return unsubscribe;
+    // Instant catalog loading
+    setLoading(false);
   }, []);
 
   // Compute products - bound to fetched products or fallback elements
@@ -272,12 +278,12 @@ export default function Shop() {
   // Determine which image to show inside the Live Acrylic Mockup
   const getMockupDisplayImage = () => {
     if (selectedMode === 'standard') {
-      return activeProduct.image;
+      return normalizeImagePath(activeProduct?.image);
     } else {
       if (customType === 'formal') {
-        return activeFormalProduct?.image || '';
+        return normalizeImagePath(activeFormalProduct?.image || '');
       } else {
-        return activeTemplateProduct?.image || '';
+        return normalizeImagePath(activeTemplateProduct?.image || '');
       }
     }
   };
@@ -501,7 +507,7 @@ export default function Shop() {
           >
             <ImageIcon className={cn("w-4.5 h-4.5", selectedMode === 'standard' ? "text-emerald-400" : "text-slate-400")} />
             <span className={cn("text-xs font-black uppercase tracking-wide", selectedMode === 'standard' ? "text-white" : "text-slate-900 dark:text-slate-100")}>
-              Ganci Random
+              Ganci Standar
             </span>
           </button>
 
@@ -710,7 +716,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                     PILIH KATALOG GANCI RANDOM
+                    🛍️ PILIH KATALOG GANCI STANDAR
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -728,13 +734,13 @@ export default function Shop() {
                       >
                         <div className="aspect-[3/4] w-full bg-slate-100 dark:bg-slate-950 flex items-center justify-center relative overflow-hidden transition-colors shrink-0">
                           <img 
-                            src={p.image} 
+                            src={normalizeImagePath(p.image)} 
                             className="absolute inset-0 w-full h-full object-cover blur-sm opacity-25 scale-110 pointer-events-none" 
                             referrerPolicy="no-referrer" 
                             alt="" 
                           />
                           <img 
-                            src={p.image} 
+                            src={normalizeImagePath(p.image)} 
                             className="relative z-10 max-w-full max-h-full object-contain pointer-events-none select-none transition-all duration-300" 
                             style={{ imageRendering: 'high-quality' }} 
                             referrerPolicy="no-referrer" 
@@ -748,7 +754,7 @@ export default function Shop() {
                         </div>
                         <div className="p-2.5 flex-1 flex flex-col justify-between bg-white dark:bg-slate-900/50 border-t border-slate-100 dark:border-white/5">
                           <span className={cn(
-                            "text-xs font-black block leading-tight truncate",
+                            "text-xs font-black block leading-tight break-words line-clamp-2 min-h-[2rem]",
                             activeProductIdx === i ? "text-emerald-500" : "text-slate-950 dark:text-slate-200"
                           )}>
                             {p.name}
@@ -771,7 +777,7 @@ export default function Shop() {
                 >
                   <div className="space-y-2">
                     <label className="text-xs font-black text-purple-500 uppercase tracking-wider block text-center">
-                       PILIH MODEL KUSTOMISASI
+                      ⚙️ PILIH MODEL KUSTOMISASI
                     </label>
 
                     <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
@@ -821,8 +827,8 @@ export default function Shop() {
                             )}
                           >
                             <div className="aspect-[3/4] w-full bg-slate-100 dark:bg-slate-950 flex items-center justify-center relative overflow-hidden transition-colors shrink-0">
-                              <img src={item.image} className="absolute inset-0 w-full h-full object-cover blur-sm opacity-25 scale-110 pointer-events-none" referrerPolicy="no-referrer" alt="" />
-                              <img src={item.image} className="relative z-10 max-w-full max-h-full object-contain pointer-events-none select-none transition-all duration-300" style={{ imageRendering: 'high-quality' }} referrerPolicy="no-referrer" alt={item.name} />
+                              <img src={normalizeImagePath(item.image)} className="absolute inset-0 w-full h-full object-cover blur-sm opacity-25 scale-110 pointer-events-none" referrerPolicy="no-referrer" alt="" />
+                              <img src={normalizeImagePath(item.image)} className="relative z-10 max-w-full max-h-full object-contain pointer-events-none select-none transition-all duration-300" style={{ imageRendering: 'high-quality' }} referrerPolicy="no-referrer" alt={item.name} />
                               {selectedFormalIdx === idx && (
                                 <div className="absolute top-2 right-2 w-5 h-5 bg-purple-500 text-white rounded-full flex items-center justify-center shadow-md z-20">
                                   <Check className="w-3 h-3" />
@@ -831,7 +837,7 @@ export default function Shop() {
                             </div>
                             <div className="p-2.5 flex-1 flex flex-col justify-between bg-white dark:bg-slate-900/50 border-t border-slate-100 dark:border-white/5">
                               <span className={cn(
-                                "text-xs font-black block leading-tight truncate",
+                                "text-xs font-black block leading-tight break-words line-clamp-2 min-h-[2rem]",
                                 selectedFormalIdx === idx ? "text-purple-500" : "text-slate-950 dark:text-slate-200"
                               )}>
                                 {item.name || `Desain Formal ${idx + 1}`}
@@ -860,8 +866,8 @@ export default function Shop() {
                             )}
                           >
                             <div className="aspect-[3/4] w-full bg-slate-100 dark:bg-slate-950 flex items-center justify-center relative overflow-hidden transition-colors shrink-0">
-                              <img src={item.image} className="absolute inset-0 w-full h-full object-cover blur-sm opacity-25 scale-110 pointer-events-none" referrerPolicy="no-referrer" alt="" />
-                              <img src={item.image} className="relative z-10 max-w-full max-h-full object-contain pointer-events-none select-none transition-all duration-300" style={{ imageRendering: 'high-quality' }} referrerPolicy="no-referrer" alt={item.name} />
+                              <img src={normalizeImagePath(item.image)} className="absolute inset-0 w-full h-full object-cover blur-sm opacity-25 scale-110 pointer-events-none" referrerPolicy="no-referrer" alt="" />
+                              <img src={normalizeImagePath(item.image)} className="relative z-10 max-w-full max-h-full object-contain pointer-events-none select-none transition-all duration-300" style={{ imageRendering: 'high-quality' }} referrerPolicy="no-referrer" alt={item.name} />
                               <div className="absolute top-2 left-2 bg-emerald-500/95 text-[9px] font-black text-white px-1.5 py-0.5 rounded-full shadow-sm z-20">
                                 #{idx + 1}
                               </div>
@@ -873,7 +879,7 @@ export default function Shop() {
                             </div>
                             <div className="p-2.5 flex-1 flex flex-col justify-between bg-white dark:bg-slate-900/50 border-t border-slate-100 dark:border-white/5">
                               <span className={cn(
-                                "text-xs font-black block leading-tight truncate",
+                                "text-xs font-black block leading-tight break-words line-clamp-2 min-h-[2rem]",
                                 selectedTemplateIdx === idx ? "text-purple-500" : "text-slate-950 dark:text-slate-200"
                               )}>
                                 {item.name || `Template ${idx + 1}`}
@@ -972,7 +978,7 @@ export default function Shop() {
                 type="submit" 
                 className="bg-emerald-500 hover:bg-emerald-400 px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-[0.98] group flex items-center gap-1.5 cursor-pointer font-bold shrink-0 text-white"
               >
-                <span className="text-xs uppercase tracking-wider font-extrabold font-sans">PESAN GANCI</span>
+                <span className="text-xs uppercase tracking-wider font-extrabold font-sans">PESAN WIDGET</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
