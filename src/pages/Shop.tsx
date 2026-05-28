@@ -88,7 +88,7 @@ export const DEFAULT_PRODUCTS = [
     id: 'fintag-standard-10',
     name: 'Ku aman ada bersama mu',
     price: 15000,
-    image: '/public/products/Biasa/2.jpg',
+    image: '/public/products/Biasa/2.jpeg',
     description: 'Sentuhan mewah bertabur serpihan foil emas sintetis berkilau di dalam bingkai akrilik berkepadatan tinggi.'
   }
 ];
