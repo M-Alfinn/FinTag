@@ -489,7 +489,7 @@ export default function Shop() {
           >
             <ImageIcon className={cn("w-4.5 h-4.5", selectedMode === 'standard' ? "text-emerald-400" : "text-slate-400")} />
             <span className={cn("text-xs font-black uppercase tracking-wide", selectedMode === 'standard' ? "text-white" : "text-slate-900 dark:text-slate-100")}>
-              Ganci Standar
+              Ganci Random
             </span>
           </button>
 
@@ -698,7 +698,7 @@ export default function Shop() {
                   className="space-y-3 text-left"
                 >
                   <label className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider block">
-                     PILIH KATALOG GANCI STANDAR
+                     PILIH KATALOG GANCI RANDOM
                   </label>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
