@@ -972,7 +972,7 @@ export default function Shop() {
                 type="submit" 
                 className="bg-emerald-500 hover:bg-emerald-400 px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-[0.98] group flex items-center gap-1.5 cursor-pointer font-bold shrink-0 text-white"
               >
-                <span className="text-xs uppercase tracking-wider font-extrabold font-sans">PESAN WIDGET</span>
+                <span className="text-xs uppercase tracking-wider font-extrabold font-sans">PESAN GANCI</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
