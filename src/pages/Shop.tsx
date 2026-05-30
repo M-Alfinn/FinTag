@@ -271,7 +271,7 @@ export default function Shop() {
   const basePrice = selectedMode === 'custom' 
     ? (customType === 'formal' ? Number(activeFormalProduct?.price || 15000) : Number(activeTemplateProduct?.price || 15500)) 
     : Number(activeProduct.price || 0);
-  const customCost = selectedMode === 'custom' ? 2000 : 0;
+  const customCost = selectedMode === 'custom' ? 0 : 0;
   const unitPrice = basePrice + customCost;
   const totalPrice = unitPrice * form.quantity;
 
@@ -690,7 +690,7 @@ export default function Shop() {
               <div className="flex justify-between font-medium">
                 <span>Instan Layanan {selectedMode === 'standard' ? '(Bebas Biaya)' : '(Custom Jasa)'}:</span>
                 <span className="font-bold text-slate-900 dark:text-white">
-                  {selectedMode === 'custom' ? `+ ${formatRupiah(2000)}` : formatRupiah(0)}
+                  {selectedMode === 'custom' ? `+ ${formatRupiah(0)}` : formatRupiah(0)}
                 </span>
               </div>
               <div className="flex justify-between border-t border-dashed border-slate-200 dark:border-white/10 pt-1 text-xs font-black">
